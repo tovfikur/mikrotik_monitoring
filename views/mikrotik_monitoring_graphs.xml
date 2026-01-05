@@ -8,9 +8,8 @@
         <field name="model">mikrotik.metric.point</field>
         <field name="arch" type="xml">
             <graph string="Metrics Graph" type="line" sample="1">
-                <field name="ts_collected" interval="minute"/>
+                <field name="ts_collected"/>
                 <field name="value_float" type="measure"/>
-                <field name="interface_name" invisible="1"/>
             </graph>
         </field>
     </record>
@@ -22,7 +21,7 @@
         <field name="arch" type="xml">
             <pivot string="Metrics Analysis" sample="1">
                 <field name="metric_id" type="row"/>
-                <field name="ts_collected" interval="hour" type="col"/>
+                <field name="ts_collected" type="col"/>
                 <field name="value_float" type="measure"/>
             </pivot>
         </field>
@@ -253,8 +252,8 @@
                     <filter name="group_device" string="Device" context="{'group_by': 'device_id'}"/>
                     <filter name="group_metric" string="Metric" context="{'group_by': 'metric_id'}"/>
                     <filter name="group_interface" string="Interface" context="{'group_by': 'interface_name'}"/>
-                    <filter name="group_hour" string="Hour" context="{'group_by': 'ts_collected:hour'}"/>
-                    <filter name="group_day" string="Day" context="{'group_by': 'ts_collected:day'}"/>
+                    <filter name="group_hour" string="Hour" context="{'group_by': 'ts_collected'}"/>
+                    <filter name="group_day" string="Day" context="{'group_by': 'ts_collected'}"/>
                 </group>
             </search>
         </field>
