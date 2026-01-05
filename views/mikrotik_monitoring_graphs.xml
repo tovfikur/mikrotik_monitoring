@@ -36,8 +36,6 @@
         <field name="domain">[('metric_id.key', 'in', ['iface.rx_bps', 'iface.tx_bps'])]</field>
         <field name="context">{
             'search_default_device_id': active_id,
-            'graph_measure': 'value_float',
-            'graph_groupbys': ['ts_collected:minute', 'interface_name'],
         }</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
@@ -57,8 +55,6 @@
         <field name="domain">[('metric_id.key', 'in', ['iface.rx_error', 'iface.tx_error', 'iface.rx_drop', 'iface.tx_drop'])]</field>
         <field name="context">{
             'search_default_device_id': active_id,
-            'graph_measure': 'value_float',
-            'graph_groupbys': ['ts_collected:minute', 'metric_id'],
         }</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
@@ -78,8 +74,6 @@
         <field name="domain">[('metric_id.key', '=', 'system.cpu.load_pct')]</field>
         <field name="context">{
             'search_default_device_id': active_id,
-            'graph_measure': 'value_float',
-            'graph_groupbys': ['ts_collected:minute'],
         }</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
@@ -99,8 +93,6 @@
         <field name="domain">[('metric_id.key', 'in', ['system.memory.used_pct', 'system.memory.free_bytes'])]</field>
         <field name="context">{
             'search_default_device_id': active_id,
-            'graph_measure': 'value_float',
-            'graph_groupbys': ['ts_collected:minute', 'metric_id'],
         }</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
@@ -120,8 +112,6 @@
         <field name="domain">[('metric_id.key', '=', 'firewall.connection_count')]</field>
         <field name="context">{
             'search_default_device_id': active_id,
-            'graph_measure': 'value_float',
-            'graph_groupbys': ['ts_collected:minute'],
         }</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
@@ -141,8 +131,6 @@
         <field name="domain">[('metric_id.key', '=', 'ppp.active_sessions')]</field>
         <field name="context">{
             'search_default_device_id': active_id,
-            'graph_measure': 'value_float',
-            'graph_groupbys': ['ts_collected:minute'],
         }</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
@@ -162,8 +150,6 @@
         <field name="domain">[('metric_id.key', 'in', ['dhcp.active_leases', 'dhcp.total_leases'])]</field>
         <field name="context">{
             'search_default_device_id': active_id,
-            'graph_measure': 'value_float',
-            'graph_groupbys': ['ts_collected:minute', 'metric_id'],
         }</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
@@ -183,8 +169,6 @@
         <field name="domain">[('metric_id.key', 'like', 'system.health.%')]</field>
         <field name="context">{
             'search_default_device_id': active_id,
-            'graph_measure': 'value_float',
-            'graph_groupbys': ['ts_collected:minute', 'metric_id'],
         }</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
@@ -204,8 +188,6 @@
         <field name="domain">[('metric_id.key', '=', 'system.uptime_seconds')]</field>
         <field name="context">{
             'search_default_device_id': active_id,
-            'graph_measure': 'value_float',
-            'graph_groupbys': ['ts_collected:day'],
         }</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
@@ -222,8 +204,6 @@
         <field name="domain">[('metric_id.key', '=', 'system.disk.used_pct')]</field>
         <field name="context">{
             'search_default_device_id': active_id,
-            'graph_measure': 'value_float',
-            'graph_groupbys': ['ts_collected:hour'],
         }</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
