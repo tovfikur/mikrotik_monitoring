@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Site Tree View -->
+    <record id="view_mikrotik_site_tree" model="ir.ui.view">
+        <field name="name">mikrotik.site.tree</field>
+        <field name="model">mikrotik.site</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="location"/>
+                <field name="device_count"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Site Form View -->
+    <record id="view_mikrotik_site_form" model="ir.ui.view">
+        <field name="name">mikrotik.site.form</field>
+        <field name="model">mikrotik.site</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="location"/>
+                        </group>
+                        <group>
+                            <field name="device_count"/>
+                        </group>
+                    </group>
+                    <group string="Devices at this Site">
+                        <field name="device_ids" nolabel="1">
+                            <tree>
+                                <field name="device_uid"/>
+                                <field name="name"/>
+                                <field name="host"/>
+                                <field name="state" widget="badge"/>
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Site Action -->
+    <record id="action_mikrotik_site" model="ir.actions.act_window">
+        <field name="name">Sites</field>
+        <field name="res_model">mikrotik.site</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Tag Tree View -->
+    <record id="view_mikrotik_tag_tree" model="ir.ui.view">
+        <field name="name">mikrotik.tag.tree</field>
+        <field name="model">mikrotik.tag</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+                <field name="color" widget="color_picker"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Tag Action -->
+    <record id="action_mikrotik_tag" model="ir.actions.act_window">
+        <field name="name">Tags</field>
+        <field name="res_model">mikrotik.tag</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+</odoo>

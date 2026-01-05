@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Session Tree View -->
+    <record id="view_mikrotik_session_tree" model="ir.ui.view">
+        <field name="name">mikrotik.session.tree</field>
+        <field name="model">mikrotik.session</field>
+        <field name="arch" type="xml">
+            <tree create="false" edit="false">
+                <field name="device_id"/>
+                <field name="session_type" widget="badge"/>
+                <field name="name"/>
+                <field name="caller_id"/>
+                <field name="address"/>
+                <field name="service"/>
+                <field name="uptime_display"/>
+                <field name="bytes_in"/>
+                <field name="bytes_out"/>
+                <field name="last_seen"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Session Form View -->
+    <record id="view_mikrotik_session_form" model="ir.ui.view">
+        <field name="name">mikrotik.session.form</field>
+        <field name="model">mikrotik.session</field>
+        <field name="arch" type="xml">
+            <form create="false" edit="false">
+                <sheet>
+                    <group>
+                        <group string="Session Info">
+                            <field name="device_id"/>
+                            <field name="session_type"/>
+                            <field name="name"/>
+                            <field name="caller_id"/>
+                            <field name="address"/>
+                        </group>
+                        <group string="Connection">
+                            <field name="service"/>
+                            <field name="interface"/>
+                            <field name="uptime_display"/>
+                            <field name="uptime"/>
+                            <field name="is_active"/>
+                        </group>
+                    </group>
+                    <group string="Traffic">
+                        <group>
+                            <field name="bytes_in"/>
+                            <field name="bytes_out"/>
+                        </group>
+                        <group>
+                            <field name="started_at"/>
+                            <field name="last_seen"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Session Search View -->
+    <record id="view_mikrotik_session_search" model="ir.ui.view">
+        <field name="name">mikrotik.session.search</field>
+        <field name="model">mikrotik.session</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="device_id"/>
+                <field name="name"/>
+                <field name="caller_id"/>
+                <field name="address"/>
+                <separator/>
+                <filter name="filter_pppoe" string="PPPoE" domain="[('session_type', '=', 'pppoe')]"/>
+                <filter name="filter_hotspot" string="Hotspot" domain="[('session_type', '=', 'hotspot')]"/>
+                <filter name="filter_pptp" string="PPTP" domain="[('session_type', '=', 'pptp')]"/>
+                <filter name="filter_l2tp" string="L2TP" domain="[('session_type', '=', 'l2tp')]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_device" string="Device" context="{'group_by': 'device_id'}"/>
+                    <filter name="group_type" string="Session Type" context="{'group_by': 'session_type'}"/>
+                    <filter name="group_service" string="Service" context="{'group_by': 'service'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Session Action -->
+    <record id="action_mikrotik_session" model="ir.actions.act_window">
+        <field name="name">Active Sessions</field>
+        <field name="res_model">mikrotik.session</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_mikrotik_session_search"/>
+    </record>
+
+</odoo>

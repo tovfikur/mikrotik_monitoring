@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Main Menu -->
+    <menuitem id="menu_mikrotik_monitoring_root"
+              name="MikroTik Monitoring"
+              web_icon="mikrotik_monitoring,static/description/icon.png"
+              sequence="100"/>
+
+    <!-- Dashboards -->
+    <menuitem id="menu_mikrotik_dashboards"
+              name="Dashboards"
+              parent="menu_mikrotik_monitoring_root"
+              sequence="10"/>
+
+    <menuitem id="menu_mikrotik_dashboard_overview"
+              name="Network Overview"
+              parent="menu_mikrotik_dashboards"
+              action="action_mikrotik_device"
+              sequence="10"/>
+
+    <!-- Devices -->
+    <menuitem id="menu_mikrotik_devices"
+              name="Devices"
+              parent="menu_mikrotik_monitoring_root"
+              sequence="20"/>
+
+    <menuitem id="menu_mikrotik_device_list"
+              name="All Devices"
+              parent="menu_mikrotik_devices"
+              action="action_mikrotik_device"
+              sequence="10"/>
+
+    <menuitem id="menu_mikrotik_interface_list"
+              name="Interfaces"
+              parent="menu_mikrotik_devices"
+              action="action_mikrotik_interface"
+              sequence="20"/>
+
+    <!-- Monitoring -->
+    <menuitem id="menu_mikrotik_monitoring"
+              name="Monitoring"
+              parent="menu_mikrotik_monitoring_root"
+              sequence="30"/>
+
+    <menuitem id="menu_mikrotik_metric_latest"
+              name="Latest Metrics"
+              parent="menu_mikrotik_monitoring"
+              action="action_mikrotik_metric_latest"
+              sequence="10"/>
+
+    <menuitem id="menu_mikrotik_events"
+              name="Events"
+              parent="menu_mikrotik_monitoring"
+              action="action_mikrotik_event"
+              sequence="20"/>
+
+    <!-- Users & Sessions -->
+    <menuitem id="menu_mikrotik_users"
+              name="Users &amp; Sessions"
+              parent="menu_mikrotik_monitoring_root"
+              sequence="40"/>
+
+    <menuitem id="menu_mikrotik_leases"
+              name="DHCP Leases"
+              parent="menu_mikrotik_users"
+              action="action_mikrotik_lease"
+              sequence="10"/>
+
+    <menuitem id="menu_mikrotik_sessions"
+              name="Active Sessions"
+              parent="menu_mikrotik_users"
+              action="action_mikrotik_session"
+              sequence="20"/>
+
+    <!-- Configuration -->
+    <menuitem id="menu_mikrotik_config"
+              name="Configuration"
+              parent="menu_mikrotik_monitoring_root"
+              groups="mikrotik_monitoring.group_mikrotik_admin"
+              sequence="90"/>
+
+    <menuitem id="menu_mikrotik_sites"
+              name="Sites"
+              parent="menu_mikrotik_config"
+              action="action_mikrotik_site"
+              sequence="10"/>
+
+    <menuitem id="menu_mikrotik_tags"
+              name="Tags"
+              parent="menu_mikrotik_config"
+              action="action_mikrotik_tag"
+              sequence="20"/>
+
+    <menuitem id="menu_mikrotik_metric_catalog"
+              name="Metric Definitions"
+              parent="menu_mikrotik_config"
+              action="action_mikrotik_metric_catalog"
+              sequence="30"/>
+
+    <!-- Advanced (Admin only) -->
+    <menuitem id="menu_mikrotik_advanced"
+              name="Advanced"
+              parent="menu_mikrotik_monitoring_root"
+              groups="mikrotik_monitoring.group_mikrotik_admin"
+              sequence="95"/>
+
+    <menuitem id="menu_mikrotik_time_series"
+              name="Time Series Data"
+              parent="menu_mikrotik_advanced"
+              action="action_mikrotik_metric_point"
+              sequence="10"/>
+
+    <!-- Collector Control Actions -->
+    <record id="action_start_collector" model="ir.actions.server">
+        <field name="name">Start Collector</field>
+        <field name="model_id" ref="model_mikrotik_device"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_start_collector()</field>
+    </record>
+
+    <record id="action_stop_collector" model="ir.actions.server">
+        <field name="name">Stop Collector</field>
+        <field name="model_id" ref="model_mikrotik_device"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_stop_collector()</field>
+    </record>
+
+    <menuitem id="menu_mikrotik_collector"
+              name="Collector"
+              parent="menu_mikrotik_config"
+              sequence="5"/>
+
+    <menuitem id="menu_start_collector"
+              name="Start Collector"
+              parent="menu_mikrotik_collector"
+              action="action_start_collector"
+              sequence="10"/>
+
+    <menuitem id="menu_stop_collector"
+              name="Stop Collector"
+              parent="menu_mikrotik_collector"
+              action="action_stop_collector"
+              sequence="20"/>
+
+</odoo>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Interface Tree View -->
+    <record id="view_mikrotik_interface_tree" model="ir.ui.view">
+        <field name="name">mikrotik.interface.tree</field>
+        <field name="model">mikrotik.interface</field>
+        <field name="arch" type="xml">
+            <tree decoration-success="is_running and is_enabled"
+                  decoration-muted="not is_enabled"
+                  decoration-danger="not is_running and is_enabled">
+                <field name="device_id"/>
+                <field name="name"/>
+                <field name="interface_type"/>
+                <field name="mac_address"/>
+                <field name="mtu"/>
+                <field name="is_running" widget="boolean"/>
+                <field name="is_enabled" widget="boolean"/>
+                <field name="t0_enabled" widget="boolean_toggle"/>
+                <field name="rx_bps_display"/>
+                <field name="tx_bps_display"/>
+                <field name="last_seen"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Interface Form View -->
+    <record id="view_mikrotik_interface_form" model="ir.ui.view">
+        <field name="name">mikrotik.interface.form</field>
+        <field name="model">mikrotik.interface</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Interface Info">
+                            <field name="device_id"/>
+                            <field name="interface_type"/>
+                            <field name="mac_address"/>
+                            <field name="mtu"/>
+                            <field name="speed"/>
+                        </group>
+                        <group string="Status">
+                            <field name="is_running"/>
+                            <field name="is_enabled"/>
+                            <field name="last_seen"/>
+                        </group>
+                    </group>
+                    <group string="Collection Settings">
+                        <group>
+                            <field name="t0_enabled" widget="boolean_toggle"/>
+                        </group>
+                    </group>
+                    <group string="Traffic (Latest)">
+                        <group>
+                            <field name="rx_bps_display"/>
+                            <field name="tx_bps_display"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Interface Search View -->
+    <record id="view_mikrotik_interface_search" model="ir.ui.view">
+        <field name="name">mikrotik.interface.search</field>
+        <field name="model">mikrotik.interface</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="device_id"/>
+                <field name="interface_type"/>
+                <field name="mac_address"/>
+                <separator/>
+                <filter name="filter_running" string="Running" domain="[('is_running', '=', True)]"/>
+                <filter name="filter_enabled" string="Enabled" domain="[('is_enabled', '=', True)]"/>
+                <filter name="filter_t0" string="T0 Enabled" domain="[('t0_enabled', '=', True)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_device" string="Device" context="{'group_by': 'device_id'}"/>
+                    <filter name="group_type" string="Type" context="{'group_by': 'interface_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Interface Action -->
+    <record id="action_mikrotik_interface" model="ir.actions.act_window">
+        <field name="name">Interfaces</field>
+        <field name="res_model">mikrotik.interface</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_mikrotik_interface_search"/>
+        <field name="context">{'search_default_filter_running': 1}</field>
+    </record>
+
+</odoo>

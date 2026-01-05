@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="mikrotik_monitoring.LiveDashboard">
+        <div class="mikrotik_live_dashboard">
+            <!-- Connection Status -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div t-attf-class="mikrotik_connection_status #{state.connected ? 'connected' : 'disconnected'}">
+                    <span class="status_dot"/>
+                    <span t-if="state.connected">Live</span>
+                    <span t-else="">Disconnected</span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="text-muted small">
+                        Last update: <t t-esc="formattedLastUpdate"/>
+                    </span>
+                    <button class="btn btn-sm btn-outline-secondary" 
+                            t-on-click="refreshData"
+                            t-att-disabled="state.loading">
+                        <i t-attf-class="fa fa-refresh #{state.loading ? 'fa-spin' : ''}"/>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div t-if="state.loading" class="text-center py-5">
+                <i class="fa fa-spinner fa-spin fa-2x text-muted"/>
+                <p class="mt-2 text-muted">Loading metrics...</p>
+            </div>
+
+            <!-- No Device Selected -->
+            <div t-elif="!deviceId" class="text-center py-5 text-muted">
+                <i class="fa fa-info-circle fa-2x mb-2"/>
+                <p>Save the device to view live metrics.</p>
+            </div>
+
+            <!-- Metrics Display -->
+            <div t-else="">
+                <!-- System Metrics -->
+                <div t-if="systemMetrics.length > 0" class="mb-4">
+                    <h5 class="mb-3">
+                        <i class="fa fa-server me-2"/>System
+                    </h5>
+                    <div class="mikrotik_metric_grid">
+                        <t t-foreach="systemMetrics" t-as="metric" t-key="metric.key">
+                            <div t-attf-class="mikrotik_metric_card #{metric.updated ? 'updated' : ''}">
+                                <div class="mikrotik_metric_label">
+                                    <t t-esc="metric.key.replace('system.', '').replace(/_/g, ' ')"/>
+                                </div>
+                                <div class="mikrotik_metric_value">
+                                    <t t-esc="metric.value"/>
+                                </div>
+                                <div class="mikrotik_metric_timestamp" t-if="metric.timestamp">
+                                    <t t-esc="metric.timestamp"/>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+
+                <!-- Interface Metrics -->
+                <div t-if="Object.keys(interfaceMetrics).length > 0">
+                    <h5 class="mb-3">
+                        <i class="fa fa-exchange me-2"/>Interfaces
+                    </h5>
+                    <t t-foreach="Object.entries(interfaceMetrics)" t-as="entry" t-key="entry[0]">
+                        <div class="card mb-2">
+                            <div class="card-header py-2">
+                                <strong><t t-esc="entry[0]"/></strong>
+                            </div>
+                            <div class="card-body py-2">
+                                <div class="row">
+                                    <t t-foreach="entry[1]" t-as="metric" t-key="metric.key">
+                                        <div class="col-md-4 col-6 mb-2">
+                                            <small class="text-muted d-block">
+                                                <t t-esc="metric.key.replace('iface.', '')"/>
+                                            </small>
+                                            <span t-attf-class="#{metric.updated ? 'text-primary fw-bold' : ''}">
+                                                <t t-esc="metric.value"/>
+                                            </span>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+
+                <!-- No Metrics Yet -->
+                <div t-if="Object.keys(state.metrics).length === 0" 
+                     class="text-center py-5 text-muted">
+                    <i class="fa fa-chart-line fa-2x mb-2"/>
+                    <p>No metrics received yet.</p>
+                    <p class="small">
+                        Make sure the collector service is running and connected.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates>

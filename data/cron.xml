@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Retention Cleanup - Run daily at 3 AM -->
+    <record id="ir_cron_mikrotik_retention_cleanup" model="ir.cron">
+        <field name="name">MikroTik: Clean Old Metric Data</field>
+        <field name="model_id" ref="model_mikrotik_metric_point"/>
+        <field name="state">code</field>
+        <field name="code">model.cleanup_old_partitions()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+        <field name="doall">False</field>
+    </record>
+
+    <!-- Event Cleanup - Run daily, keep 30 days of events -->
+    <record id="ir_cron_mikrotik_event_cleanup" model="ir.cron">
+        <field name="name">MikroTik: Clean Old Events</field>
+        <field name="model_id" ref="model_mikrotik_event"/>
+        <field name="state">code</field>
+        <field name="code">model.cleanup_old_events()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+        <field name="doall">False</field>
+    </record>
+
+    <!-- Check Device Health - Run every minute -->
+    <record id="ir_cron_mikrotik_health_check" model="ir.cron">
+        <field name="name">MikroTik: Device Health Check</field>
+        <field name="model_id" ref="model_mikrotik_device"/>
+        <field name="state">code</field>
+        <field name="code">model._check_device_health()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">minutes</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+        <field name="doall">False</field>
+    </record>
+
+    <!-- Initialize Default Metrics - Run once on install -->
+    <record id="ir_cron_mikrotik_init_metrics" model="ir.cron">
+        <field name="name">MikroTik: Initialize Default Metrics</field>
+        <field name="model_id" ref="model_mikrotik_metric_catalog"/>
+        <field name="state">code</field>
+        <field name="code">model.init_default_metrics()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">1</field>
+        <field name="active">True</field>
+        <field name="doall">False</field>
+    </record>
+
+</odoo>

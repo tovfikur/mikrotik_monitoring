@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Lease Tree View -->
+    <record id="view_mikrotik_lease_tree" model="ir.ui.view">
+        <field name="name">mikrotik.lease.tree</field>
+        <field name="model">mikrotik.lease</field>
+        <field name="arch" type="xml">
+            <tree decoration-success="status == 'bound'"
+                  decoration-muted="status == 'expired'"
+                  decoration-warning="status == 'waiting'"
+                  create="false" edit="false">
+                <field name="device_id"/>
+                <field name="address"/>
+                <field name="mac_address"/>
+                <field name="hostname"/>
+                <field name="server"/>
+                <field name="status" widget="badge"/>
+                <field name="expires_at"/>
+                <field name="last_seen"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Lease Form View -->
+    <record id="view_mikrotik_lease_form" model="ir.ui.view">
+        <field name="name">mikrotik.lease.form</field>
+        <field name="model">mikrotik.lease</field>
+        <field name="arch" type="xml">
+            <form create="false" edit="false">
+                <sheet>
+                    <group>
+                        <group string="Lease Info">
+                            <field name="device_id"/>
+                            <field name="address"/>
+                            <field name="mac_address"/>
+                            <field name="hostname"/>
+                            <field name="client_id"/>
+                        </group>
+                        <group string="Status">
+                            <field name="server"/>
+                            <field name="status"/>
+                            <field name="is_static"/>
+                            <field name="expires_at"/>
+                            <field name="last_seen"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Lease Search View -->
+    <record id="view_mikrotik_lease_search" model="ir.ui.view">
+        <field name="name">mikrotik.lease.search</field>
+        <field name="model">mikrotik.lease</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="device_id"/>
+                <field name="address"/>
+                <field name="mac_address"/>
+                <field name="hostname"/>
+                <separator/>
+                <filter name="filter_bound" string="Bound" domain="[('status', '=', 'bound')]"/>
+                <filter name="filter_waiting" string="Waiting" domain="[('status', '=', 'waiting')]"/>
+                <filter name="filter_expired" string="Expired" domain="[('status', '=', 'expired')]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_device" string="Device" context="{'group_by': 'device_id'}"/>
+                    <filter name="group_server" string="Server" context="{'group_by': 'server'}"/>
+                    <filter name="group_status" string="Status" context="{'group_by': 'status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Lease Action -->
+    <record id="action_mikrotik_lease" model="ir.actions.act_window">
+        <field name="name">DHCP Leases</field>
+        <field name="res_model">mikrotik.lease</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_mikrotik_lease_search"/>
+        <field name="context">{'search_default_filter_bound': 1}</field>
+    </record>
+
+</odoo>

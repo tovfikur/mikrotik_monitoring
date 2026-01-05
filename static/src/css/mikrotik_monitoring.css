@@ -1,0 +1,218 @@
+/* MikroTik Monitoring Styles */
+
+/* Device status badges */
+.o_mikrotik_status_up {
+  color: #28a745;
+}
+
+.o_mikrotik_status_down {
+  color: #dc3545;
+}
+
+.o_mikrotik_status_degraded {
+  color: #ffc107;
+}
+
+.o_mikrotik_status_disabled {
+  color: #6c757d;
+}
+
+/* Live dashboard container */
+.mikrotik_live_dashboard {
+  padding: 16px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  min-height: 200px;
+}
+
+/* Metric cards */
+.mikrotik_metric_grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.mikrotik_metric_card {
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 16px;
+  transition: box-shadow 0.2s ease;
+}
+
+.mikrotik_metric_card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.mikrotik_metric_card.updated {
+  animation: metric-pulse 0.3s ease;
+}
+
+@keyframes metric-pulse {
+  0% {
+    background-color: #e3f2fd;
+  }
+  100% {
+    background-color: white;
+  }
+}
+
+.mikrotik_metric_label {
+  font-size: 12px;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.mikrotik_metric_value {
+  font-size: 24px;
+  font-weight: 600;
+  color: #212529;
+}
+
+.mikrotik_metric_unit {
+  font-size: 14px;
+  font-weight: 400;
+  color: #6c757d;
+  margin-left: 4px;
+}
+
+.mikrotik_metric_timestamp {
+  font-size: 11px;
+  color: #adb5bd;
+  margin-top: 8px;
+}
+
+/* Interface traffic bars */
+.mikrotik_traffic_bar {
+  height: 8px;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.mikrotik_traffic_bar_fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.mikrotik_traffic_bar_rx {
+  background: linear-gradient(90deg, #28a745, #20c997);
+}
+
+.mikrotik_traffic_bar_tx {
+  background: linear-gradient(90deg, #007bff, #17a2b8);
+}
+
+/* Device header stats */
+.mikrotik_device_header {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.mikrotik_device_stat {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px 24px;
+  border-radius: 12px;
+  min-width: 180px;
+  text-align: center;
+}
+
+.mikrotik_device_stat.warning {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.mikrotik_device_stat.success {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.mikrotik_device_stat_value {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.mikrotik_device_stat_label {
+  font-size: 13px;
+  opacity: 0.9;
+  margin-top: 4px;
+}
+
+/* Connection status indicator */
+.mikrotik_connection_status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.mikrotik_connection_status.connected {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.mikrotik_connection_status.disconnected {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.mikrotik_connection_status .status_dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.mikrotik_connection_status.connected .status_dot {
+  background-color: #28a745;
+  animation: pulse-dot 2s infinite;
+}
+
+.mikrotik_connection_status.disconnected .status_dot {
+  background-color: #dc3545;
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Event severity colors */
+.mikrotik_event_error {
+  border-left: 4px solid #dc3545;
+}
+
+.mikrotik_event_warning {
+  border-left: 4px solid #ffc107;
+}
+
+.mikrotik_event_info {
+  border-left: 4px solid #17a2b8;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .mikrotik_metric_grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .mikrotik_device_header {
+    flex-direction: column;
+  }
+
+  .mikrotik_device_stat {
+    width: 100%;
+  }
+}

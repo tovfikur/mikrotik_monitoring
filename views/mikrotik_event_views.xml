@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Event Tree View -->
+    <record id="view_mikrotik_event_tree" model="ir.ui.view">
+        <field name="name">mikrotik.event.tree</field>
+        <field name="model">mikrotik.event</field>
+        <field name="arch" type="xml">
+            <tree decoration-danger="severity == 'error'"
+                  decoration-warning="severity == 'warning'"
+                  decoration-info="severity == 'info'"
+                  create="false" edit="false" delete="false">
+                <field name="ts"/>
+                <field name="device_id"/>
+                <field name="event_type"/>
+                <field name="severity" widget="badge"
+                       decoration-danger="severity == 'error'"
+                       decoration-warning="severity == 'warning'"
+                       decoration-info="severity == 'info'"/>
+                <field name="subject"/>
+                <field name="message"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Event Form View -->
+    <record id="view_mikrotik_event_form" model="ir.ui.view">
+        <field name="name">mikrotik.event.form</field>
+        <field name="model">mikrotik.event</field>
+        <field name="arch" type="xml">
+            <form create="false" edit="false">
+                <sheet>
+                    <group>
+                        <group string="Event">
+                            <field name="ts"/>
+                            <field name="device_id"/>
+                            <field name="event_type"/>
+                            <field name="severity"/>
+                            <field name="subject"/>
+                        </group>
+                    </group>
+                    <group string="Details">
+                        <field name="message"/>
+                        <field name="data_json"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Event Search View -->
+    <record id="view_mikrotik_event_search" model="ir.ui.view">
+        <field name="name">mikrotik.event.search</field>
+        <field name="model">mikrotik.event</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="device_id"/>
+                <field name="event_type"/>
+                <field name="subject"/>
+                <field name="message"/>
+                <separator/>
+                <filter name="filter_error" string="Errors" domain="[('severity', '=', 'error')]"/>
+                <filter name="filter_warning" string="Warnings" domain="[('severity', '=', 'warning')]"/>
+                <filter name="filter_info" string="Info" domain="[('severity', '=', 'info')]"/>
+                <separator/>
+                <filter name="filter_today" string="Today" 
+                        domain="[('ts', '>=', (context_today()).strftime('%Y-%m-%d'))]"/>
+                <filter name="filter_week" string="This Week" 
+                        domain="[('ts', '>=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <filter name="filter_device_down" string="Device Down" 
+                        domain="[('event_type', '=', 'device_down')]"/>
+                <filter name="filter_interface" string="Interface Events" 
+                        domain="['|', ('event_type', '=', 'interface_up'), ('event_type', '=', 'interface_down')]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_device" string="Device" context="{'group_by': 'device_id'}"/>
+                    <filter name="group_type" string="Event Type" context="{'group_by': 'event_type'}"/>
+                    <filter name="group_severity" string="Severity" context="{'group_by': 'severity'}"/>
+                    <filter name="group_date" string="Date" context="{'group_by': 'ts:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Event Action -->
+    <record id="action_mikrotik_event" model="ir.actions.act_window">
+        <field name="name">Events</field>
+        <field name="res_model">mikrotik.event</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_mikrotik_event_search"/>
+        <field name="context">{'search_default_filter_today': 1}</field>
+        <field name="limit">100</field>
+    </record>
+
+</odoo>

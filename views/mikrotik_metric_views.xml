@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Metric Latest Tree View -->
+    <record id="view_mikrotik_metric_latest_tree" model="ir.ui.view">
+        <field name="name">mikrotik.metric.latest.tree</field>
+        <field name="model">mikrotik.metric.latest</field>
+        <field name="arch" type="xml">
+            <tree create="false" edit="false" delete="false">
+                <field name="device_id"/>
+                <field name="metric_key"/>
+                <field name="interface_name"/>
+                <field name="display_value"/>
+                <field name="ts_collected" widget="relative"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Metric Latest Search View -->
+    <record id="view_mikrotik_metric_latest_search" model="ir.ui.view">
+        <field name="name">mikrotik.metric.latest.search</field>
+        <field name="model">mikrotik.metric.latest</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="device_id"/>
+                <field name="metric_key"/>
+                <field name="interface_name"/>
+                <separator/>
+                <filter name="filter_system" string="System Metrics" 
+                        domain="[('metric_key', '=like', 'system.%')]"/>
+                <filter name="filter_interface" string="Interface Metrics" 
+                        domain="[('metric_key', '=like', 'iface.%')]"/>
+                <filter name="filter_routing" string="Routing Metrics" 
+                        domain="['|', ('metric_key', '=like', 'bgp.%'), ('metric_key', '=like', 'ospf.%')]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_device" string="Device" context="{'group_by': 'device_id'}"/>
+                    <filter name="group_metric" string="Metric Key" context="{'group_by': 'metric_key'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Metric Latest Action -->
+    <record id="action_mikrotik_metric_latest" model="ir.actions.act_window">
+        <field name="name">Latest Metrics</field>
+        <field name="res_model">mikrotik.metric.latest</field>
+        <field name="view_mode">tree</field>
+        <field name="search_view_id" ref="view_mikrotik_metric_latest_search"/>
+    </record>
+
+    <!-- Metric Point Tree View (for debugging) -->
+    <record id="view_mikrotik_metric_point_tree" model="ir.ui.view">
+        <field name="name">mikrotik.metric.point.tree</field>
+        <field name="model">mikrotik.metric.point</field>
+        <field name="arch" type="xml">
+            <tree create="false" edit="false" delete="false" limit="100">
+                <field name="ts_collected"/>
+                <field name="device_id"/>
+                <field name="metric_id"/>
+                <field name="interface_name"/>
+                <field name="value_float"/>
+                <field name="value_text"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Metric Point Search View -->
+    <record id="view_mikrotik_metric_point_search" model="ir.ui.view">
+        <field name="name">mikrotik.metric.point.search</field>
+        <field name="model">mikrotik.metric.point</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="device_id"/>
+                <field name="metric_id"/>
+                <field name="interface_name"/>
+                <filter name="filter_today" string="Today" 
+                        domain="[('ts_collected', '>=', (context_today()).strftime('%Y-%m-%d'))]"/>
+                <filter name="filter_last_hour" string="Last Hour" 
+                        domain="[('ts_collected', '>=', (context_today() - datetime.timedelta(hours=1)))]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_device" string="Device" context="{'group_by': 'device_id'}"/>
+                    <filter name="group_metric" string="Metric" context="{'group_by': 'metric_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Metric Point Action (Admin only) -->
+    <record id="action_mikrotik_metric_point" model="ir.actions.act_window">
+        <field name="name">Time Series Data</field>
+        <field name="res_model">mikrotik.metric.point</field>
+        <field name="view_mode">tree</field>
+        <field name="search_view_id" ref="view_mikrotik_metric_point_search"/>
+        <field name="context">{'search_default_filter_today': 1}</field>
+        <field name="limit">100</field>
+    </record>
+
+    <!-- Metric Catalog Tree View -->
+    <record id="view_mikrotik_metric_catalog_tree" model="ir.ui.view">
+        <field name="name">mikrotik.metric.catalog.tree</field>
+        <field name="model">mikrotik.metric.catalog</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="key"/>
+                <field name="name"/>
+                <field name="unit"/>
+                <field name="metric_type"/>
+                <field name="collection_tier"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Metric Catalog Action -->
+    <record id="action_mikrotik_metric_catalog" model="ir.actions.act_window">
+        <field name="name">Metric Definitions</field>
+        <field name="res_model">mikrotik.metric.catalog</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

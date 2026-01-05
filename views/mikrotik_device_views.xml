@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Device Tree View -->
+    <record id="view_mikrotik_device_tree" model="ir.ui.view">
+        <field name="name">mikrotik.device.tree</field>
+        <field name="model">mikrotik.device</field>
+        <field name="arch" type="xml">
+            <tree decoration-success="state == 'up'" 
+                  decoration-warning="state == 'degraded'"
+                  decoration-danger="state == 'down'"
+                  decoration-muted="state == 'disabled'">
+                <field name="device_uid"/>
+                <field name="name"/>
+                <field name="host"/>
+                <field name="site_id"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'up'"
+                       decoration-warning="state == 'degraded'"
+                       decoration-danger="state == 'down'"
+                       decoration-muted="state == 'disabled'"/>
+                <field name="last_seen" widget="relative"/>
+                <field name="collection_enabled" widget="boolean_toggle"/>
+                <field name="tag_ids" widget="many2many_tags" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Device Kanban View -->
+    <record id="view_mikrotik_device_kanban" model="ir.ui.view">
+        <field name="name">mikrotik.device.kanban</field>
+        <field name="model">mikrotik.device</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+                <field name="name"/>
+                <field name="device_uid"/>
+                <field name="host"/>
+                <field name="state"/>
+                <field name="last_seen"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <div class="o_kanban_record_top mb-2">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="name"/>
+                                        </strong>
+                                    </div>
+                                    <field name="state" widget="badge"
+                                           decoration-success="state == 'up'"
+                                           decoration-warning="state == 'degraded'"
+                                           decoration-danger="state == 'down'"
+                                           decoration-muted="state == 'disabled'"/>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <div><strong>UID:</strong> <field name="device_uid"/></div>
+                                    <div><strong>Host:</strong> <field name="host"/></div>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left text-muted">
+                                        <i class="fa fa-clock-o" title="Last Seen"/> <field name="last_seen" widget="relative"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Device Form View -->
+    <record id="view_mikrotik_device_form" model="ir.ui.view">
+        <field name="name">mikrotik.device.form</field>
+        <field name="model">mikrotik.device</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_test_connection" type="object" 
+                            string="Test Connection" class="btn-primary"/>
+                    <button name="action_refresh_capabilities" type="object"
+                            string="Refresh Capabilities" class="btn-secondary"/>
+                    <button name="action_start_collector" type="object"
+                            string="Start Collector" class="btn-success"
+                            groups="mikrotik_monitoring.group_mikrotik_admin"/>
+                    <button name="action_stop_collector" type="object"
+                            string="Stop Collector" class="btn-warning"
+                            groups="mikrotik_monitoring.group_mikrotik_admin"/>
+                    <field name="state" widget="statusbar" 
+                           statusbar_visible="unknown,up,degraded,down,disabled"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_interfaces" type="object"
+                                class="oe_stat_button" icon="fa-exchange">
+                            <field name="interface_count" string="Interfaces" widget="statinfo"/>
+                        </button>
+                        <button name="action_view_leases" type="object"
+                                class="oe_stat_button" icon="fa-laptop">
+                            <field name="lease_count" string="DHCP Leases" widget="statinfo"/>
+                        </button>
+                        <button name="action_view_ppp" type="object"
+                                class="oe_stat_button" icon="fa-plug">
+                            <field name="ppp_count" string="PPP" widget="statinfo"/>
+                        </button>
+                        <button name="action_view_sessions" type="object"
+                                class="oe_stat_button" icon="fa-user">
+                            <field name="session_count" string="Sessions" widget="statinfo"/>
+                        </button>
+                        <button name="action_view_events" type="object"
+                                class="oe_stat_button" icon="fa-bell">
+                            <field name="event_count" string="Events" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Disabled" bg_color="bg-secondary"
+                            invisible="state != 'disabled'"/>
+                    <widget name="web_ribbon" title="Down" bg_color="bg-danger"
+                            invisible="state != 'down'"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Router Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Connection">
+                            <field name="device_uid"/>
+                            <field name="host"/>
+                            <field name="api_port"/>
+                            <field name="use_ssl"/>
+                            <field name="last_seen"/>
+                        </group>
+                        <group string="Authentication">
+                            <field name="username"/>
+                            <field name="password" password="True"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Live Dashboard" name="live">
+                            <group string="Collection Settings">
+                                <group>
+                                    <field name="collection_enabled"/>
+                                    <field name="collection_tier"/>
+                                </group>
+                                <group>
+                                    <field name="site_id"/>
+                                    <field name="tag_ids" widget="many2many_tags"/>
+                                </group>
+                            </group>
+                            <separator string="Live Metrics"/>
+                            <!-- Live metrics snapshot - full width -->
+                            <field name="latest_metric_ids" nolabel="1" readonly="1">
+                                <tree create="false" delete="false" editable="false" limit="20">
+                                    <field name="metric_key"/>
+                                    <field name="interface_name"/>
+                                    <field name="display_value"/>
+                                    <field name="ts_collected" widget="relative"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Interfaces" name="interfaces">
+                            <field name="interface_ids">
+                                <tree editable="bottom" create="false" delete="false">
+                                    <field name="name"/>
+                                    <field name="interface_type"/>
+                                    <field name="mac_address"/>
+                                    <field name="is_running" widget="boolean"/>
+                                    <field name="is_enabled" widget="boolean"/>
+                                    <field name="t0_enabled" widget="boolean_toggle"/>
+                                    <field name="rx_bps_display"/>
+                                    <field name="tx_bps_display"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Capabilities" name="capabilities"
+                              invisible="not capability_id">
+                            <group>
+                                <group string="Device Capabilities">
+                                    <field name="capability_id" readonly="1"/>
+                                </group>
+                            </group>
+                            <div class="text-muted">
+                                <p>Click on the capability record above to view detailed system information, 
+                                   hardware specs, and feature flags.</p>
+                            </div>
+                        </page>
+                        <page string="Events" name="events">
+                            <field name="event_ids" readonly="1">
+                                <tree limit="50" decoration-danger="severity == 'error'"
+                                      decoration-warning="severity == 'warning'"
+                                      decoration-info="severity == 'info'">
+                                    <field name="ts"/>
+                                    <field name="event_type"/>
+                                    <field name="severity" widget="badge"/>
+                                    <field name="subject"/>
+                                    <field name="message"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes" placeholder="Internal notes about this device..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Device Search View -->
+    <record id="view_mikrotik_device_search" model="ir.ui.view">
+        <field name="name">mikrotik.device.search</field>
+        <field name="model">mikrotik.device</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="device_uid"/>
+                <field name="host"/>
+                <field name="site_id"/>
+                <separator/>
+                <filter name="filter_up" string="Up" domain="[('state', '=', 'up')]"/>
+                <filter name="filter_degraded" string="Degraded" domain="[('state', '=', 'degraded')]"/>
+                <filter name="filter_down" string="Down" domain="[('state', '=', 'down')]"/>
+                <filter name="filter_disabled" string="Disabled" domain="[('state', '=', 'disabled')]"/>
+                <separator/>
+                <filter name="filter_collection_enabled" string="Collection Enabled" 
+                        domain="[('collection_enabled', '=', True)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_state" string="State" context="{'group_by': 'state'}"/>
+                    <filter name="group_site" string="Site" context="{'group_by': 'site_id'}"/>
+                    <filter name="group_tier" string="Collection Tier" context="{'group_by': 'collection_tier'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Device Action -->
+    <record id="action_mikrotik_device" model="ir.actions.act_window">
+        <field name="name">Devices</field>
+        <field name="res_model">mikrotik.device</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="search_view_id" ref="view_mikrotik_device_search"/>
+        <field name="context">{'search_default_filter_collection_enabled': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add your first MikroTik device
+            </p>
+            <p>
+                Configure MikroTik routers and access points for real-time monitoring.
+            </p>
+        </field>
+    </record>
+
+</odoo>

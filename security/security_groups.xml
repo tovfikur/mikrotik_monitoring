@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Module Category -->
+    <record id="module_category_mikrotik_monitoring" model="ir.module.category">
+        <field name="name">MikroTik Monitoring</field>
+        <field name="description">MikroTik Router Monitoring and Management</field>
+        <field name="sequence">100</field>
+    </record>
+
+    <!-- Viewer Group - Read-only access to monitoring data -->
+    <record id="group_mikrotik_viewer" model="res.groups">
+        <field name="name">Viewer</field>
+        <field name="category_id" ref="module_category_mikrotik_monitoring"/>
+        <field name="comment">Read-only access to MikroTik monitoring dashboards and data</field>
+    </record>
+
+    <!-- Admin Group - Full access including configuration -->
+    <record id="group_mikrotik_admin" model="res.groups">
+        <field name="name">Administrator</field>
+        <field name="category_id" ref="module_category_mikrotik_monitoring"/>
+        <field name="implied_ids" eval="[(4, ref('group_mikrotik_viewer'))]"/>
+        <field name="comment">Full access to MikroTik monitoring including device configuration</field>
+    </record>
+
+    <!-- Legacy aliases for compatibility -->
+    <record id="group_mikrotik_monitoring_admin" model="res.groups">
+        <field name="name">MikroTik Monitoring Admin (Legacy)</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+        <field name="implied_ids" eval="[(4, ref('group_mikrotik_admin'))]"/>
+    </record>
+
+    <record id="group_mikrotik_monitoring_viewer" model="res.groups">
+        <field name="name">MikroTik Monitoring Viewer (Legacy)</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+        <field name="implied_ids" eval="[(4, ref('group_mikrotik_viewer'))]"/>
+    </record>
+
+</odoo>

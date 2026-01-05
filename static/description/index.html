@@ -1,0 +1,60 @@
+# MikroTik Monitoring for Odoo 17 ISP-grade real-time monitoring solution for
+MikroTik RouterOS devices. ## Features ### Real-Time Telemetry - **1-second
+resolution** for critical metrics (CPU, priority interfaces) - **Tiered
+collection** (T0=1s, T1=10s, T2=60s, T3=15min) for efficiency - **Live
+dashboard** with bus-based real-time updates - **90-day data retention** with
+automatic cleanup ### Device Management - RouterOS v6 and v7 compatible -
+Automatic capability discovery - Site/tag-based organization - Multi-router
+support (tested with 3+ routers) ### Interface Monitoring - Dynamic T0 interface
+selection (mark critical interfaces for 1s polling) - Traffic rate computation
+(rx_bps, tx_bps) - Interface state change events - Support for 30+ interfaces
+per device ### User Session Tracking - **DHCP leases** - Current-state table for
+20k+ end users - **PPPoE sessions** - Real-time session monitoring - **Hotspot
+users** - Active user tracking - Aggregate metrics without per-user time-series
+bloat ### Event & Alerting - Device up/down/degraded detection - Interface state
+changes - Configurable severity levels - Event history with search ### ISP-Grade
+Architecture - Append-only time-series storage - Latest snapshot table for fast
+UI reads - External collector service for high-frequency polling - Bulk insert
+optimizations - Daily partition support (PostgreSQL) ## Quick Start ### 1.
+Install the Module ```bash # Copy module to addons path cp -r
+mikrotik_monitoring /path/to/odoo/addons/ # Update Odoo ./odoo-bin -d
+your_database -u mikrotik_monitoring ``` ### 2. Configure a Device 1. Go to
+**MikroTik Monitoring → Devices → All Devices** 2. Click **Create** 3. Enter
+device details: - Name: Router-01 - Device UID: MT-0001 - Host: 192.168.88.1 -
+Username: api-user - Password: (your password) 4. Click **Test Connection** ###
+3. Enable T0 for Critical Interfaces 1. Open the device form 2. Go to
+**Interfaces** tab 3. Enable **T0** toggle for priority interfaces (max 10
+recommended) ### 4. Start the Collector Service ```bash cd collector/ python -m
+venv venv source venv/bin/activate # Windows: venv\Scripts\activate pip install
+-r requirements.txt cp config.example.yaml config.yaml # Edit config.yaml with
+your Odoo URL python collector.py ``` ## Configuration ### Collection Tiers |
+Tier | Interval | Use Case | |------|----------|----------| | T0 | 1 second |
+CPU load, critical interface traffic | | T1 | 10 seconds | All interface
+traffic, memory | | T2 | 60 seconds | DHCP counts, session counts, health | | T3
+| 15 minutes | Discovery, capability refresh | ### System Parameters Set in
+**Settings → Technical → System Parameters**: | Key | Description |
+|-----|-------------| | `mikrotik_monitoring.collector_secret` | HMAC secret for
+collector auth | | `mikrotik_monitoring.retention_days` | Data retention period
+(default: 90) | ## API Endpoints ### Ingestion (for collector) - `POST
+/mikrotik/ingest/metrics` - Push telemetry metrics - `POST
+/mikrotik/ingest/events` - Push events - `POST /mikrotik/ingest/interfaces` -
+Sync interface inventory - `POST /mikrotik/ingest/leases` - Sync DHCP leases -
+`POST /mikrotik/ingest/sessions` - Sync PPP/Hotspot sessions ### Configuration -
+`POST /mikrotik/api/devices` - Get device list for collector - `GET
+/mikrotik/api/health` - Health check endpoint ## Scale Sizing ### Reference: 3
+Routers × 30 Interfaces × 20k Users | Component | Estimate |
+|-----------|----------| | T0 points/day | ~2.6M (10 ifaces × 3 metrics ×
+86400s) | | T1 points/day | ~750k | | Storage/day | ~400 MB | | Storage/90 days
+| ~36 GB | | DHCP rows | 20,000 (current-state) | | PPP rows | 1,000
+(current-state) | ## Security ### Groups - **MikroTik Monitoring /
+Administrator** - Full access - **MikroTik Monitoring / Viewer** - Read-only
+access ### Recommendations 1. Use TLS for RouterOS API (port 8729) 2. Create
+dedicated API user on routers with read-only access 3. Set `collector_secret`
+for authenticated ingestion 4. Restrict collector network access to Odoo server
+## Troubleshooting ### Device shows "Down" but is reachable 1. Check collector
+service is running: `systemctl status mikrotik-collector` 2. Verify network
+connectivity from collector to router 3. Check Odoo logs for ingestion errors
+### High CPU usage on collector 1. Reduce T0 interfaces per device 2. Increase
+T1/T2 intervals 3. Reduce buffer flush interval ### Missing metrics in UI 1.
+Verify bus service is enabled in Odoo 2. Check browser console for JavaScript
+errors 3. Refresh the page to resubscribe to updates ## License LGPL-3
