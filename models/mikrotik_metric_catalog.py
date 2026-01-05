@@ -103,24 +103,58 @@ class MikrotikMetricCatalog(models.Model):
         defaults = [
             # System metrics
             {"key": "system.cpu.load_pct", "name": "CPU Load %", "unit": "percent", "category": "system"},
-            {"key": "system.mem.used_bytes", "name": "Memory Used", "unit": "bytes", "category": "system"},
-            {"key": "system.mem.free_bytes", "name": "Memory Free", "unit": "bytes", "category": "system"},
+            {"key": "system.memory.used_pct", "name": "Memory Used %", "unit": "percent", "category": "system"},
+            {"key": "system.memory.free_bytes", "name": "Memory Free", "unit": "bytes", "category": "system"},
+            {"key": "system.memory.total_bytes", "name": "Memory Total", "unit": "bytes", "category": "system"},
+            {"key": "system.disk.used_pct", "name": "Disk Used %", "unit": "percent", "category": "system"},
             {"key": "system.disk.free_bytes", "name": "Disk Free", "unit": "bytes", "category": "system"},
-            {"key": "system.uptime_sec", "name": "Uptime", "unit": "seconds", "category": "system"},
+            {"key": "system.uptime_seconds", "name": "Uptime", "unit": "seconds", "category": "system"},
             {"key": "system.temperature", "name": "Temperature", "unit": "celsius", "category": "system"},
+            
+            # System health metrics
+            {"key": "system.health.temperature", "name": "Temperature", "unit": "celsius", "category": "system"},
+            {"key": "system.health.voltage", "name": "Voltage", "unit": "text", "category": "system"},
+            {"key": "system.health.fan1-speed", "name": "Fan 1 Speed", "unit": "text", "category": "system"},
+            {"key": "system.health.fan2-speed", "name": "Fan 2 Speed", "unit": "text", "category": "system"},
+            {"key": "system.health.psu1-voltage", "name": "PSU 1 Voltage", "unit": "text", "category": "system"},
+            {"key": "system.health.psu2-voltage", "name": "PSU 2 Voltage", "unit": "text", "category": "system"},
+            
+            # Interface traffic rates
+            {"key": "iface.rx_bps", "name": "RX Rate (bps)", "unit": "bps", "category": "interface"},
+            {"key": "iface.tx_bps", "name": "TX Rate (bps)", "unit": "bps", "category": "interface"},
+            
+            # Interface errors and drops
+            {"key": "iface.rx_error", "name": "RX Errors", "unit": "count", "metric_type": "counter", "category": "interface"},
+            {"key": "iface.tx_error", "name": "TX Errors", "unit": "count", "metric_type": "counter", "category": "interface"},
+            {"key": "iface.rx_drop", "name": "RX Drops", "unit": "count", "metric_type": "counter", "category": "interface"},
+            {"key": "iface.tx_drop", "name": "TX Drops", "unit": "count", "metric_type": "counter", "category": "interface"},
             
             # Interface counters
             {"key": "iface.rx_bytes_total", "name": "RX Bytes Total", "unit": "bytes", "metric_type": "counter", "category": "interface"},
             {"key": "iface.tx_bytes_total", "name": "TX Bytes Total", "unit": "bytes", "metric_type": "counter", "category": "interface"},
             {"key": "iface.rx_packets_total", "name": "RX Packets Total", "unit": "count", "metric_type": "counter", "category": "interface"},
             {"key": "iface.tx_packets_total", "name": "TX Packets Total", "unit": "count", "metric_type": "counter", "category": "interface"},
-            {"key": "iface.rx_bps", "name": "RX Rate", "unit": "bps", "category": "interface"},
-            {"key": "iface.tx_bps", "name": "TX Rate", "unit": "bps", "category": "interface"},
-            {"key": "iface.rx_errors", "name": "RX Errors", "unit": "count", "metric_type": "counter", "category": "interface"},
-            {"key": "iface.tx_errors", "name": "TX Errors", "unit": "count", "metric_type": "counter", "category": "interface"},
             
             # Firewall/conntrack
-            {"key": "firewall.conntrack_count", "name": "Conntrack Entries", "unit": "count", "category": "firewall"},
+            {"key": "firewall.connection_count", "name": "Active Connections", "unit": "count", "category": "firewall"},
+            {"key": "firewall.drops_total", "name": "Firewall Drops", "unit": "count", "metric_type": "counter", "category": "firewall"},
+            {"key": "firewall.drops_bytes", "name": "Firewall Drop Bytes", "unit": "bytes", "metric_type": "counter", "category": "firewall"},
+            
+            # Queue/Bandwidth
+            {"key": "queue.current_rate", "name": "Queue Current Rate", "unit": "bps", "category": "queue"},
+            {"key": "queue.max_limit", "name": "Queue Max Limit", "unit": "bps", "category": "queue"},
+            
+            # Latency and packet loss
+            {"key": "ping.avg_latency_ms", "name": "Ping Avg Latency", "unit": "seconds", "category": "system"},
+            {"key": "ping.max_latency_ms", "name": "Ping Max Latency", "unit": "seconds", "category": "system"},
+            {"key": "ping.packet_loss_pct", "name": "Ping Packet Loss", "unit": "percent", "category": "system"},
+            
+            # BGP
+            {"key": "bgp.prefix_count", "name": "BGP Prefix Count", "unit": "count", "category": "routing"},
+            {"key": "bgp.session_state", "name": "BGP Session State", "unit": "text", "category": "routing"},
+            
+            # Routing
+            {"key": "routing.route_count", "name": "Route Count", "unit": "count", "category": "routing"},
             
             # Wireless
             {"key": "wireless.client_count", "name": "Wireless Clients", "unit": "count", "category": "wireless"},
@@ -132,6 +166,7 @@ class MikrotikMetricCatalog(models.Model):
             
             # DHCP
             {"key": "dhcp.active_leases", "name": "Active DHCP Leases", "unit": "count", "category": "dhcp"},
+            {"key": "dhcp.total_leases", "name": "Total DHCP Leases", "unit": "count", "category": "dhcp"},
             
             # PPP/Hotspot
             {"key": "ppp.active_sessions", "name": "Active PPP Sessions", "unit": "count", "category": "ppp"},

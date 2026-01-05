@@ -43,6 +43,12 @@
               parent="menu_mikrotik_monitoring_root"
               sequence="30"/>
 
+    <menuitem id="menu_mikrotik_monitoring_graphs"
+              name="📊 Monitoring Graphs"
+              parent="menu_mikrotik_monitoring"
+              action="action_mikrotik_all_graphs"
+              sequence="5"/>
+
     <menuitem id="menu_mikrotik_metric_latest"
               name="Latest Metrics"
               parent="menu_mikrotik_monitoring"

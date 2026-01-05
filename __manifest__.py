@@ -44,6 +44,7 @@ Scale
         "security/security_groups.xml",
         "security/ir.model.access.csv",
         # Views
+        "views/mikrotik_monitoring_graphs.xml",
         "views/mikrotik_device_views.xml",
         "views/mikrotik_interface_views.xml",
         "views/mikrotik_metric_views.xml",

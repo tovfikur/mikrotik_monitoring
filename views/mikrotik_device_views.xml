@@ -112,6 +112,14 @@
                                 class="oe_stat_button" icon="fa-bell">
                             <field name="event_count" string="Events" widget="statinfo"/>
                         </button>
+                        <button name="%(action_mikrotik_all_graphs)d" type="action"
+                                class="oe_stat_button" icon="fa-line-chart"
+                                context="{'search_default_device_id': active_id}">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Monitoring</span>
+                                <span class="o_stat_text">Graphs</span>
+                            </div>
+                        </button>
                     </div>
                     <widget name="web_ribbon" title="Disabled" bg_color="bg-secondary"
                             invisible="state != 'disabled'"/>
