@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="mikrotik_monitoring.TrafficChart" owl="1">
+        <div class="o_mikrotik_traffic_chart_pro">
+            <!-- Header Section -->
+            <div class="chart-header">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h3 class="mb-1"><i class="fa fa-tachometer"/> <t t-esc="state.deviceName"/></h3>
+                        <small class="text-muted">Real-time Interface Traffic Monitor</small>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge badge-pill" t-att-class="state.autoRefresh ? 'badge-success' : 'badge-secondary'">
+                            <i class="fa" t-att-class="state.autoRefresh ? 'fa-refresh fa-spin' : 'fa-pause'"/>
+                            <t t-if="state.autoRefresh">Auto-refresh: 5s</t>
+                            <t t-else="">Paused</t>
+                        </span>
+                        <small class="text-muted" t-if="state.lastUpdate">
+                            Updated: <t t-esc="formatTime(state.lastUpdate)"/>
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="row mb-3" t-if="state.stats">
+                <div class="col-md-3">
+                    <div class="stat-card stat-card-primary">
+                        <div class="stat-icon"><i class="fa fa-arrow-down"/></div>
+                        <div class="stat-details">
+                            <div class="stat-label">Total RX</div>
+                            <div class="stat-value"><t t-esc="formatBandwidth(state.stats.totalRx)"/></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card stat-card-success">
+                        <div class="stat-icon"><i class="fa fa-arrow-up"/></div>
+                        <div class="stat-details">
+                            <div class="stat-label">Total TX</div>
+                            <div class="stat-value"><t t-esc="formatBandwidth(state.stats.totalTx)"/></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card stat-card-info">
+                        <div class="stat-icon"><i class="fa fa-exchange"/></div>
+                        <div class="stat-details">
+                            <div class="stat-label">Interfaces</div>
+                            <div class="stat-value"><t t-esc="state.stats.interfaceCount"/></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card stat-card-warning">
+                        <div class="stat-icon"><i class="fa fa-database"/></div>
+                        <div class="stat-details">
+                            <div class="stat-label">Data Points</div>
+                            <div class="stat-value"><t t-esc="state.stats.pointCount"/></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Control Panel -->
+            <div class="control-panel mb-3">
+                <div class="row g-2">
+                    <!-- Time Range Buttons -->
+                    <div class="col-md-6">
+                        <label class="control-label">Time Range</label>
+                        <div class="btn-group btn-group-sm w-100" role="group">
+                            <button type="button" 
+                                    class="btn"
+                                    t-att-class="state.timeRange === 300 ? 'btn-primary' : 'btn-outline-primary'"
+                                    t-on-click="changeTimeRange300">
+                                5 Min
+                            </button>
+                            <button type="button" 
+                                    class="btn"
+                                    t-att-class="state.timeRange === 1800 ? 'btn-primary' : 'btn-outline-primary'"
+                                    t-on-click="changeTimeRange1800">
+                                30 Min
+                            </button>
+                            <button type="button" 
+                                    class="btn"
+                                    t-att-class="state.timeRange === 3600 ? 'btn-primary' : 'btn-outline-primary'"
+                                    t-on-click="changeTimeRange3600">
+                                1 Hour
+                            </button>
+                            <button type="button" 
+                                    class="btn"
+                                    t-att-class="state.timeRange === 86400 ? 'btn-primary' : 'btn-outline-primary'"
+                                    t-on-click="changeTimeRange86400">
+                                1 Day
+                            </button>
+                            <button type="button" 
+                                    class="btn"
+                                    t-att-class="state.timeRange === 604800 ? 'btn-primary' : 'btn-outline-primary'"
+                                    t-on-click="changeTimeRange604800">
+                                7 Days
+                            </button>
+                            <button type="button" 
+                                    class="btn"
+                                    t-att-class="state.timeRange === 2592000 ? 'btn-primary' : 'btn-outline-primary'"
+                                    t-on-click="changeTimeRange2592000">
+                                30 Days
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Interface Filter -->
+                    <div class="col-md-3">
+                        <label class="control-label">Interface Filter</label>
+                        <select class="form-select form-select-sm" t-model="state.selectedInterface" t-on-change="applyFilters">
+                            <option value="">All Interfaces</option>
+                            <t t-foreach="state.interfaces" t-as="iface" t-key="iface">
+                                <option t-att-value="iface"><t t-esc="iface"/></option>
+                            </t>
+                        </select>
+                    </div>
+
+                    <!-- Metric Type Filter -->
+                    <div class="col-md-3">
+                        <label class="control-label">Traffic Direction</label>
+                        <select class="form-select form-select-sm" t-model="state.metricFilter" t-on-change="applyFilters">
+                            <option value="both">Both RX &amp; TX</option>
+                            <option value="rx">RX Only</option>
+                            <option value="tx">TX Only</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="row g-2 mt-2">
+                    <div class="col-md-12">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <button type="button" class="btn btn-outline-secondary" t-on-click="toggleAutoRefresh">
+                                <i class="fa" t-att-class="state.autoRefresh ? 'fa-pause' : 'fa-play'"/>
+                                <t t-if="state.autoRefresh">Pause</t>
+                                <t t-else="">Resume</t>
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" t-on-click="refreshNow">
+                                <i class="fa fa-refresh"/> Refresh Now
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" t-on-click="resetZoom">
+                                <i class="fa fa-search-minus"/> Reset Zoom
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" t-on-click="toggleLegend">
+                                <i class="fa fa-list"/> Toggle Legend
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" t-on-click="exportData">
+                                <i class="fa fa-download"/> Export CSV
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart Container -->
+            <div class="chart-wrapper">
+                <div t-if="state.loading and !this.chart" class="chart-loading">
+                    <i class="fa fa-spinner fa-spin fa-3x text-primary"/>
+                    <p class="mt-3">Loading traffic data...</p>
+                </div>
+                <canvas t-ref="chartCanvas" class="traffic-chart-canvas"/>
+            </div>
+
+            <!-- Footer Info -->
+            <div class="chart-footer mt-2">
+                <small class="text-muted">
+                    <i class="fa fa-info-circle"/> 
+                    Use mouse wheel to zoom • Drag to pan timeline • Click legend to toggle interfaces
+                </small>
+            </div>
+        </div>
+    </t>
+</templates>

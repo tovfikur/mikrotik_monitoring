@@ -120,6 +120,14 @@
                                 <span class="o_stat_text">Graphs</span>
                             </div>
                         </button>
+                        <button name="%(action_mikrotik_traffic_chart)d" type="action"
+                                class="oe_stat_button" icon="fa-area-chart"
+                                context="{'default_device_id': active_id, 'device_id': active_id}">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">ISP Traffic</span>
+                                <span class="o_stat_text">Monitor</span>
+                            </div>
+                        </button>
                     </div>
                     <widget name="web_ribbon" title="Disabled" bg_color="bg-secondary"
                             invisible="state != 'disabled'"/>
@@ -150,6 +158,7 @@
                                 <group>
                                     <field name="collection_enabled"/>
                                     <field name="collection_tier"/>
+                                    <field name="ping_target" placeholder="8.8.8.8"/>
                                 </group>
                                 <group>
                                     <field name="site_id"/>

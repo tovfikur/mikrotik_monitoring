@@ -1,0 +1,279 @@
+/* Professional Odoo-Style Traffic Chart Component */
+
+.o_mikrotik_traffic_chart_pro {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  padding: 0;
+  background: transparent;
+}
+
+/* Header - Odoo Style */
+.o_mikrotik_traffic_chart_pro .chart-header {
+  background: white;
+  padding: 16px 24px;
+  border-bottom: 1px solid #dee2e6;
+  margin-bottom: 16px;
+}
+
+.o_mikrotik_traffic_chart_pro .chart-header h3 {
+  color: #495057;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.o_mikrotik_traffic_chart_pro .chart-header .text-muted {
+  color: #6c757d;
+  font-size: 13px;
+}
+
+/* Stats Cards - Odoo Native Button Stat Style */
+.stat-card {
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.2s ease;
+}
+
+.stat-card:hover {
+  border-color: #875a7b;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.stat-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.stat-card-primary .stat-icon {
+  background-color: #017e84;
+}
+
+.stat-card-success .stat-icon {
+  background-color: #00a09d;
+}
+
+.stat-card-info .stat-icon {
+  background-color: #875a7b;
+}
+
+.stat-card-warning .stat-icon {
+  background-color: #f0ad4e;
+}
+
+.stat-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.stat-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #212529;
+  line-height: 1.2;
+}
+
+/* Control Panel - Odoo Card Style */
+.control-panel {
+  background: white;
+  padding: 16px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.control-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #495057;
+  margin-bottom: 6px;
+}
+
+/* Buttons - Odoo Style */
+.o_mikrotik_traffic_chart_pro .btn {
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 4px;
+  font-weight: 400;
+  transition: all 0.15s ease;
+}
+
+.o_mikrotik_traffic_chart_pro .btn-outline-primary {
+  border: 1px solid #dee2e6;
+  color: #495057;
+  background: white;
+}
+
+.o_mikrotik_traffic_chart_pro .btn-outline-primary:hover {
+  background: #f8f9fa;
+  color: #875a7b;
+  border-color: #875a7b;
+}
+
+.o_mikrotik_traffic_chart_pro .btn-primary {
+  background-color: #875a7b;
+  border: 1px solid #875a7b;
+  color: white;
+}
+
+.o_mikrotik_traffic_chart_pro .btn-primary:hover {
+  background-color: #6f4868;
+  border-color: #6f4868;
+}
+
+.o_mikrotik_traffic_chart_pro .btn-secondary {
+  background-color: #6c757d;
+  border: 1px solid #6c757d;
+  color: white;
+}
+
+.o_mikrotik_traffic_chart_pro .btn-success {
+  background-color: #00a09d;
+  border: 1px solid #00a09d;
+  color: white;
+}
+
+.o_mikrotik_traffic_chart_pro .btn-info {
+  background-color: #017e84;
+  border: 1px solid #017e84;
+  color: white;
+}
+
+.o_mikrotik_traffic_chart_pro .btn-warning {
+  background-color: #f0ad4e;
+  border: 1px solid #f0ad4e;
+  color: white;
+}
+
+/* Form Controls - Odoo Style */
+.o_mikrotik_traffic_chart_pro .form-select {
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 14px;
+  color: #495057;
+  background-color: white;
+  transition: border-color 0.15s ease;
+}
+
+.o_mikrotik_traffic_chart_pro .form-select:focus {
+  border-color: #875a7b;
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(135, 90, 123, 0.25);
+}
+
+/* Chart Container - Odoo Card Style */
+.o_mikrotik_traffic_chart_pro .chart-wrapper {
+  background: white;
+  padding: 16px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  position: relative;
+  min-height: 500px;
+}
+
+/* Badge Styling - Odoo Style */
+.o_mikrotik_traffic_chart_pro .badge {
+  padding: 4px 8px;
+  font-weight: 600;
+  border-radius: 3px;
+  font-size: 12px;
+}
+
+.o_mikrotik_traffic_chart_pro .badge-success {
+  background-color: #00a09d;
+  color: white;
+}
+
+.o_mikrotik_traffic_chart_pro .badge-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+/* Loading State */
+.o_mikrotik_traffic_chart_pro .loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  z-index: 10;
+}
+
+.o_mikrotik_traffic_chart_pro .spinner-border {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 3px solid #f3f4f6;
+  border-top-color: #875a7b;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Footer - Odoo Style */
+.o_mikrotik_traffic_chart_pro .chart-footer {
+  background: transparent;
+  padding: 12px 0;
+  margin-top: 16px;
+  text-align: center;
+  color: #6c757d;
+  font-size: 12px;
+  border-top: 1px solid #dee2e6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .o_mikrotik_traffic_chart_pro .stat-card {
+    padding: 10px 12px;
+  }
+
+  .o_mikrotik_traffic_chart_pro .stat-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+
+  .o_mikrotik_traffic_chart_pro .stat-value {
+    font-size: 18px;
+  }
+
+  .o_mikrotik_traffic_chart_pro .chart-wrapper {
+    padding: 12px;
+    min-height: 400px;
+  }
+
+  .o_mikrotik_traffic_chart_pro .control-panel {
+    padding: 12px;
+  }
+}

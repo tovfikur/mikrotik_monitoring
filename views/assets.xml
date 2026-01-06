@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Include auto-refresh JavaScript for graphs -->
+    <template id="assets_backend" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/mikrotik_monitoring/static/src/js/graph_auto_refresh.js"/>
+        </xpath>
+    </template>
+</odoo>

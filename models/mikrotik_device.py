@@ -100,6 +100,11 @@ class MikrotikDevice(models.Model):
         string="Collection Enabled",
         default=True,
     )
+    ping_target = fields.Char(
+        string="Ping Target",
+        default="8.8.8.8",
+        help="Target IP or hostname to ping for latency monitoring (default: 8.8.8.8 - Google DNS)",
+    )
     collection_tier = fields.Selection(
         [
             ("t0", "T0 (1s - Real-time)"),
@@ -411,7 +416,6 @@ class MikrotikDevice(models.Model):
     # -------------------------------------------------------------------------
     # ASYNC COLLECTOR CONTROL
     # -------------------------------------------------------------------------
-    @api.model
     def action_start_collector(self):
         """Start the async collector service."""
         from ..collector.async_collector import start_collector, get_collector
@@ -442,7 +446,6 @@ class MikrotikDevice(models.Model):
             },
         }
     
-    @api.model
     def action_stop_collector(self):
         """Stop the async collector service."""
         from ..collector.async_collector import stop_collector, get_collector
@@ -473,7 +476,6 @@ class MikrotikDevice(models.Model):
             },
         }
     
-    @api.model
     def get_collector_status(self):
         """Get the current collector status."""
         from ..collector.async_collector import get_collector
@@ -558,6 +560,7 @@ class MikrotikDevice(models.Model):
                 "username": d.username,
                 "password": d.password,
                 "use_ssl": d.use_ssl,
+                "ping_target": d.ping_target or "8.8.8.8",
                 "collection_tier": d.collection_tier,
                 "t0_interval": d.t0_interval,
                 "t0_max_interfaces": d.t0_max_interfaces,
@@ -675,6 +678,27 @@ class MikrotikDevice(models.Model):
             "domain": [("device_id", "=", self.id)],
             "context": {"default_device_id": self.id},
         }
+
+    @api.model
+    def _ensure_collector_running(self):
+        """Watchdog to ensure the async collector is running.
+        Called by cron every 5 minutes."""
+        from ..collector import async_collector
+        
+        collector = async_collector.get_collector()
+        if collector is None or not collector.running:
+            _logger.warning("🔄 Collector not running, attempting to restart...")
+            dbname = self.env.cr.dbname
+            try:
+                async_collector.start_collector(dbname, self.env.uid)
+                _logger.info("✅ Collector restarted successfully")
+            except Exception as e:
+                _logger.error(f"❌ Failed to restart collector: {e}")
+        else:
+            # Check if configuration changed
+            enabled_count = self.search_count([('collection_enabled', '=', True)])
+            if enabled_count > 0:
+                _logger.debug(f"✅ Collector running, monitoring {enabled_count} devices")
 
 
 class MikrotikSite(models.Model):

@@ -43,7 +43,8 @@ Scale
         # Security
         "security/security_groups.xml",
         "security/ir.model.access.csv",
-        # Views
+        # Views - Actions must load before views that reference them
+        "views/traffic_chart_action.xml",
         "views/mikrotik_monitoring_graphs.xml",
         "views/mikrotik_device_views.xml",
         "views/mikrotik_interface_views.xml",
@@ -59,13 +60,19 @@ Scale
     "assets": {
         "web.assets_backend": [
             "mikrotik_monitoring/static/src/css/mikrotik_monitoring.css",
+            "mikrotik_monitoring/static/src/css/traffic_chart.css",
             "mikrotik_monitoring/static/src/js/mikrotik_live.js",
+            "mikrotik_monitoring/static/src/js/graph_auto_refresh.js",
+            "mikrotik_monitoring/static/src/components/traffic_chart.js",
             "mikrotik_monitoring/static/src/xml/mikrotik_live.xml",
+            "mikrotik_monitoring/static/src/xml/traffic_chart.xml",
+            # Chart.js library (loaded from CDN in component)
         ],
     },
     "application": True,
     "installable": True,
     "auto_install": False,
+    "post_load": "post_load",
     "external_dependencies": {
         "python": ["routeros_api"],
     },

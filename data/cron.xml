@@ -53,4 +53,17 @@
         <field name="doall">False</field>
     </record>
 
+    <!-- Collector Watchdog - Ensure collector is running -->
+    <record id="ir_cron_mikrotik_collector_watchdog" model="ir.cron">
+        <field name="name">MikroTik: Collector Watchdog</field>
+        <field name="model_id" ref="model_mikrotik_device"/>
+        <field name="state">code</field>
+        <field name="code">model._ensure_collector_running()</field>
+        <field name="interval_number">5</field>
+        <field name="interval_type">minutes</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+        <field name="doall">False</field>
+    </record>
+
 </odoo>
