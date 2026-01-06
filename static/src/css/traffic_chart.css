@@ -252,6 +252,68 @@
   border-top: 1px solid #dee2e6;
 }
 
+/* Smoothness Slider Styling */
+.o_mikrotik_traffic_chart_pro .form-range {
+  height: 6px;
+  cursor: pointer;
+  background: linear-gradient(
+    to right,
+    #dc3545 0%,
+    #fd7e14 25%,
+    #ffc107 50%,
+    #28a745 75%,
+    #17a2b8 100%
+  );
+  border-radius: 3px;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.o_mikrotik_traffic_chart_pro .form-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid #875a7b;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.1s ease;
+}
+
+.o_mikrotik_traffic_chart_pro .form-range::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 2px 8px rgba(135, 90, 123, 0.4);
+}
+
+.o_mikrotik_traffic_chart_pro .form-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid #875a7b;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.1s ease;
+}
+
+.o_mikrotik_traffic_chart_pro .form-range::-moz-range-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 2px 8px rgba(135, 90, 123, 0.4);
+}
+
+.o_mikrotik_traffic_chart_pro .form-range::-moz-range-track {
+  background: transparent;
+  border: none;
+}
+
+.badge-info {
+  background-color: #17a2b8;
+  color: white;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .o_mikrotik_traffic_chart_pro .stat-card {

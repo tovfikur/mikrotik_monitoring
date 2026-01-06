@@ -38,6 +38,7 @@ class TrafficChart extends Component {
       interfaces: [],
       stats: null,
       showLegend: true,
+      smoothness: 0.8, // Chart curve smoothness (0=bumpy, 1=very smooth)
     });
 
     this.chart = null;
@@ -300,7 +301,7 @@ class TrafficChart extends Component {
           : this.hexToRgba(color, 0.2),
         borderWidth: data.isPing ? 3 : 2,
         fill: data.isPing ? false : true,
-        tension: 0.8,
+        tension: this.state.smoothness,
         cubicInterpolationMode: "monotone",
         pointRadius: 0,
         pointHitRadius: 10,
@@ -599,6 +600,28 @@ class TrafficChart extends Component {
     if (this.refreshInterval) {
       clearInterval(this.refreshInterval);
       this.refreshInterval = null;
+    }
+  }
+
+  /**
+   * Change smoothness and update chart
+   */
+  changeSmoothness(newValue) {
+    this.state.smoothness = parseFloat(newValue);
+    if (this.chart && this.rawData) {
+      const metricMap = {};
+      this.rawData.forEach((p) => {
+        metricMap[p.metric_id[0]] = p.metricKey;
+      });
+      let filteredData = this.applyDataFilters(
+        this.rawData.map((p) => ({
+          ...p,
+          metric_id: [p.metric_id[0]],
+        })),
+        metricMap
+      );
+      const processedData = this.processData(filteredData, metricMap);
+      this.updateChart(processedData);
     }
   }
 
