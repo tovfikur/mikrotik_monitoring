@@ -607,7 +607,10 @@ class TrafficChart extends Component {
    * Change smoothness and update chart
    */
   changeSmoothness(newValue) {
-    this.state.smoothness = parseFloat(newValue);
+    const newSmoothness = parseFloat(newValue);
+    console.log("Smoothness changed to:", newSmoothness);
+    this.state.smoothness = newSmoothness;
+    
     if (this.chart && this.rawData) {
       const metricMap = {};
       this.rawData.forEach((p) => {
@@ -621,7 +624,15 @@ class TrafficChart extends Component {
         metricMap
       );
       const processedData = this.processData(filteredData, metricMap);
-      this.updateChart(processedData);
+      
+      // Destroy old chart and render new one to apply tension changes
+      this.chart.destroy();
+      this.chart = null;
+      
+      // Wait a tick for canvas to be ready
+      setTimeout(() => {
+        this.renderChart(processedData);
+      }, 0);
     }
   }
 
